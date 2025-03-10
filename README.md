@@ -24,8 +24,8 @@ A modern authentication system built with Next.js, NextAuth.js, and Tailwind CSS
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/vector-interview.git
-cd vector-interview
+git clone https://github.com/Daniel-T-Dada/vector-interview-app.git
+cd vector-interview-app
 ```
 
 2. Install dependencies:
@@ -117,6 +117,19 @@ The application will be available at [http://localhost:3000](http://localhost:30
    - Client-side validation with Yup
    - Credentials are verified against the mock database
    - If valid, NextAuth.js creates a session
+
+## 👤 Mock Users
+
+For demonstration purposes, the application comes with pre-configured mock users:
+
+| Name      | Email               | Password    |
+| --------- | ------------------- | ----------- |
+| Demo User | user@example.com    | password123 |
+| Double D  | double_d@vector.com | password123 |
+
+You can use these credentials to log in and test the application without creating a new account.
+
+The mock user data is stored in-memory and is defined in `lib/users.js`. In a production environment, you would replace this with a proper database connection.
 
 ## 🎨 UI Components
 
