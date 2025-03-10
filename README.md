@@ -51,7 +51,7 @@ Create a `.env.local` file in the root directory with the following variables:
 
 ```
 # NextAuth.js Configuration
-NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_URL=http://localhost:3000  # Use your deployment URL in production
 NEXTAUTH_SECRET=your-secret-key-change-in-production
 
 # Google OAuth
@@ -65,7 +65,11 @@ To get Google OAuth credentials:
 2. Create a new project
 3. Navigate to "APIs & Services" > "Credentials"
 4. Create an OAuth 2.0 Client ID
-5. Add `http://localhost:3000/api/auth/callback/google` as an authorized redirect URI
+5. Add the following as authorized redirect URIs:
+   - `http://localhost:3000/api/auth/callback/google` (for local development)
+   - `https://vector-interview-app.vercel.app/api/auth/callback/google` (for production)
+
+> **Note**: For the live application at https://vector-interview-app.vercel.app, the OAuth credentials have already been configured.
 
 ## 🚀 Running the Application
 
