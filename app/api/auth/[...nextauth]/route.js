@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { authenticateUser } from "@/lib/users";
+import { authenticateUser, getUserByEmail, createUser } from "@/lib/users";
 
 // Mock user database for demonstration purposes
 const users = [
@@ -57,6 +57,36 @@ export const authOptions = {
         signUp: "/auth/signup",
     },
     callbacks: {
+        async signIn({ user, account, profile }) {
+            console.log("Sign in callback triggered", {
+                provider: account?.provider,
+                email: user?.email,
+                name: user?.name
+            });
+
+            // If the user is signing in with Google
+            if (account?.provider === "google") {
+                console.log("Google sign-in detected");
+
+                // Check if the user already exists in our database
+                const existingUser = getUserByEmail(user.email);
+                console.log("Existing user check:", existingUser ? "User exists" : "User does not exist");
+
+                // If the user doesn't exist, create a new one
+                if (!existingUser) {
+                    console.log("Creating new user for Google sign-in");
+                    const newUser = createUser({
+                        name: user.name,
+                        email: user.email,
+                        // For Google users, we set a random password since they won't use it
+                        password: Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8),
+                    });
+                    console.log("New user created:", newUser);
+                }
+            }
+
+            return true;
+        },
         async session({ session, token }) {
             if (token && session.user) {
                 session.user.id = token.sub;
