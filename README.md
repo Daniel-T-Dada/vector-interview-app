@@ -2,7 +2,7 @@
 
 A modern authentication system built with Next.js, NextAuth.js, and Tailwind CSS for Vector Interview.
 
-![Vector Interview Screenshot](https://via.placeholder.com/800x400?text=Vector+Interview+Authentication)
+![Vector Interview Screenshot](./public/images/Preview.png)
 
 ## 🚀 Features
 
