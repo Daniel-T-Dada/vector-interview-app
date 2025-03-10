@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -28,7 +28,8 @@ const loginSchema = yup.object().shape({
         .required("Password is required"),
 });
 
-export default function LoginPage() {
+// Component to handle search params
+function LoginForm() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [error, setError] = useState(() => {
@@ -215,5 +216,25 @@ export default function LoginPage() {
                 </Card>
             </div>
         </div>
+    );
+}
+
+// Loading fallback for Suspense
+function LoginLoading() {
+    return (
+        <div className="flex justify-center items-center min-h-[calc(100vh-4rem)] px-4 py-8">
+            <div className="text-center">
+                <Spinner size="lg" className="mb-4" />
+                <p className="text-lg">Loading login page...</p>
+            </div>
+        </div>
+    );
+}
+
+export default function LoginPage() {
+    return (
+        <Suspense fallback={<LoginLoading />}>
+            <LoginForm />
+        </Suspense>
     );
 } 

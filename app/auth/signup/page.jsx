@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -37,7 +37,8 @@ const signupSchema = yup.object().shape({
         .required("Please confirm your password"),
 });
 
-export default function SignupPage() {
+// Component to handle search params
+function SignupForm() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [error, setError] = useState(() => {
@@ -265,5 +266,25 @@ export default function SignupPage() {
                 </Card>
             </div>
         </div>
+    );
+}
+
+// Loading fallback for Suspense
+function SignupLoading() {
+    return (
+        <div className="flex justify-center items-center min-h-[calc(100vh-4rem)] px-4 py-8">
+            <div className="text-center">
+                <Spinner size="lg" className="mb-4" />
+                <p className="text-lg">Loading signup page...</p>
+            </div>
+        </div>
+    );
+}
+
+export default function SignupPage() {
+    return (
+        <Suspense fallback={<SignupLoading />}>
+            <SignupForm />
+        </Suspense>
     );
 } 
