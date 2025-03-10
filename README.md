@@ -4,9 +4,18 @@ A modern authentication system built with Next.js, NextAuth.js, and Tailwind CSS
 
 ![Vector Interview Screenshot](./public/images/Preview.png)
 
+## 🌐 Live Demo
+
+The application is live and accessible at: [https://vector-interview-app.vercel.app](https://vector-interview-app.vercel.app)
+
+**Quick Access**: You can immediately try the application by:
+
+- Signing in with your Google account (recommended)
+- Using the demo credentials listed in the [Mock Users](#-mock-users) section
+
 ## 🚀 Features
 
-- **Google OAuth Authentication**: Sign in with Google accounts
+- **Google OAuth Authentication**: Sign in with your existing Google account - no registration needed!
 - **Email/Password Authentication**: Traditional login with form validation
 - **Responsive Design**: Mobile-first approach for all screen sizes
 - **Dark/Light Mode**: Theme toggle with system preference detection
@@ -105,12 +114,12 @@ The application will be available at [http://localhost:3000](http://localhost:30
 
 ## 🔒 Authentication Flow
 
-1. **Google OAuth**:
+1. **Google OAuth** (Recommended):
 
-   - User clicks "Sign in with Google"
-   - Redirected to Google consent screen
-   - After approval, redirected back to the application
-   - NextAuth.js creates a session
+   - Click "Sign in with Google" for the fastest login experience
+   - You'll be redirected to Google's secure consent screen
+   - After approval, you're automatically redirected back to the application
+   - No need to remember another password!
 
 2. **Email/Password**:
    - User enters email and password
