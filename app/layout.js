@@ -2,7 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/components/auth-provider";
-import { Navbar } from "@/components/Navbar";
+import { ConditionalNavbar } from "@/components/conditional-navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -56,7 +56,7 @@ export default function RootLayout({ children }) {
         >
           <AuthProvider>
             <div className="flex min-h-screen flex-col bg-background">
-              <Navbar />
+              <ConditionalNavbar />
               <main className="flex-1 flex justify-center relative z-10">
                 <div className="w-full">
                   {children}

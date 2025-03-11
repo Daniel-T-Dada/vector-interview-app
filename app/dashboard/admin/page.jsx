@@ -3,9 +3,9 @@
 import { useEffect } from "react";
 import { redirect } from "next/navigation";
 
-export default function UsersRedirect() {
+export default function AdminRedirect() {
   useEffect(() => {
-    redirect("/user-dashboard/users");
+    redirect("/dashboard");
   }, []);
 
   return null;

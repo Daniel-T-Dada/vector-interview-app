@@ -17,11 +17,18 @@ The application is live and accessible at: [https://vector-interview-app.vercel.
 
 - **Google OAuth Authentication**: Sign in with your existing Google account - no registration needed!
 - **Email/Password Authentication**: Traditional login with form validation
+- **Admin Dashboard**: Comprehensive admin interface with summary cards and recent activity
+- **User Dashboard**: Separate dashboard for regular users with personalized content
+- **Interview Management**: View, sort, filter, and paginate through interview data
+- **User Management**: View and manage user accounts with detailed statistics
+- **Settings Panel**: Customizable user preferences with tabs for different settings categories
 - **Responsive Design**: Mobile-first approach for all screen sizes
 - **Dark/Light Mode**: Theme toggle with system preference detection
 - **Form Validation**: Client-side validation using Yup and React Hook Form
 - **Protected Routes**: Middleware-based route protection
 - **Modern UI**: Built with Tailwind CSS and ShadCN components
+- **Skeleton Loading**: Enhanced user experience with skeleton loading states
+- **Conditional Navigation**: Smart navigation that adapts based on user role and context
 
 ## 📋 Prerequisites
 
@@ -88,17 +95,29 @@ The application will be available at [http://localhost:3000](http://localhost:30
 │── public/               # Static assets
 │── app/                  # Next.js App Router
 │   ├── layout.jsx        # Root layout (includes providers)
-│   ├── page.jsx          # Homepage (redirects to login)
+│   ├── page.jsx          # Homepage (redirects based on auth)
 │   ├── auth/             # Authentication pages
 │   │   ├── login/        # Login page
 │   │   │   ├── page.jsx
 │   │   ├── signup/       # Signup page with validation
 │   │   │   ├── page.jsx
-│   │   ├── dashboard/    # Protected dashboard page
-│   │   │   ├── page.jsx
-│   │   ├── api/          # API routes
-│   │   │   ├── auth/
-│   │   │   │   ├── [...nextauth]/route.js  # NextAuth.js API route
+│   ├── dashboard/        # Admin dashboard pages
+│   │   ├── layout.jsx    # Admin dashboard layout
+│   │   ├── page.jsx      # Admin dashboard page
+│   │   ├── interviews/   # Interview management
+│   │   │   ├── page.jsx  # Interview list page
+│   │   ├── settings/     # Settings page
+│   │   │   ├── page.jsx  # Settings configuration
+│   ├── user-dashboard/   # User dashboard pages
+│   │   ├── layout.jsx    # User dashboard layout
+│   │   ├── page.jsx      # User dashboard page
+│   │   ├── users/        # User management
+│   │   │   ├── page.jsx  # User list page
+│   ├── api/              # API routes
+│   │   ├── auth/
+│   │   │   ├── [...nextauth]/route.js  # NextAuth.js API route
+│   │   ├── users/        # User API routes
+│   │   │   ├── route.js  # User data API
 │── components/           # Reusable UI components
 │   ├── ui/               # ShadCN UI components
 │   │   ├── button.jsx    # Button component
@@ -107,11 +126,27 @@ The application will be available at [http://localhost:3000](http://localhost:30
 │   │   ├── label.jsx     # Label component
 │   │   ├── alert.jsx     # Alert component
 │   │   ├── spinner.jsx   # Loading spinner component
+│   │   ├── skeleton.jsx  # Skeleton loading component
+│   ├── admin/            # Admin-specific components
+│   │   ├── sidebar.jsx   # Admin sidebar navigation
+│   │   ├── interview-table.jsx # Interview data table
+│   ├── skeletons/        # Skeleton loading components
+│   │   ├── dashboard-skeleton.jsx  # Dashboard loading skeleton
+│   │   ├── interviews-skeleton.jsx # Interviews loading skeleton
+│   │   ├── settings-skeleton.jsx   # Settings loading skeleton
+│   │   ├── users-skeleton.jsx      # Users loading skeleton
+│   ├── conditional-navbar.jsx # Conditional navigation bar
 │   ├── Navbar.jsx        # Navigation bar
 │   ├── theme-provider.jsx # Theme provider for dark/light mode
 │   ├── auth-provider.jsx  # Authentication provider
 │── lib/                  # Utility functions
 │   ├── utils.js          # Helper functions
+│   ├── data/             # Mock data
+│   │   ├── interviews.js # Mock interview data
+│   ├── services/         # Service functions
+│   │   ├── interview-service.js # Interview data services
+│   ├── types/            # Type definitions
+│   │   ├── interview.js  # Interview type definitions
 │── middleware.js         # NextAuth.js middleware for route protection
 │── tailwind.config.js    # Tailwind CSS configuration
 ```
@@ -153,15 +188,30 @@ The project uses a combination of custom components and ShadCN UI components:
 - **Input**: Form input fields with validation
 - **Alert**: For success and error messages
 - **Spinner**: Loading indicators
+- **Skeleton**: Loading state placeholders
 - **Navbar**: Responsive navigation with mobile menu
+- **Sidebar**: Collapsible sidebar for dashboard navigation
+- **Tabs**: Tabbed interface for settings and other multi-view components
+
+## 🔄 Loading States
+
+The application implements skeleton loading states to enhance user experience:
+
+- **Dashboard Skeleton**: Shows a placeholder layout while dashboard data loads
+- **Interviews Skeleton**: Displays a table-like structure while interview data loads
+- **Settings Skeleton**: Shows a placeholder for settings panels during loading
+- **Users Skeleton**: Displays a placeholder for user data during loading
+
+These skeletons provide visual feedback to users during data fetching, making the application feel more responsive.
 
 ## 🔐 Route Protection
 
 Protected routes are implemented using NextAuth.js middleware:
 
 - `/auth/*` routes are accessible only to unauthenticated users
-- `/dashboard/*` routes are accessible only to authenticated users
-- Authenticated users are redirected to the dashboard when trying to access auth pages
+- `/dashboard/*` routes are accessible only to authenticated users with admin privileges
+- `/user-dashboard/*` routes are accessible only to authenticated users
+- Authenticated users are redirected to the appropriate dashboard based on their role
 - Unauthenticated users are redirected to the login page when trying to access protected pages
 
 ## 🌙 Dark/Light Mode
@@ -178,6 +228,7 @@ The UI is fully responsive across all device sizes:
 
 - Mobile-first approach
 - Responsive navigation with hamburger menu on small screens
+- Collapsible sidebar for dashboard navigation on mobile
 - Optimized layouts for different screen sizes
 - Accessible on touch devices
 
@@ -185,10 +236,13 @@ The UI is fully responsive across all device sizes:
 
 - Add email verification
 - Implement password reset functionality
-- Add social login providers (GitHub, Twitter, etc.)
+- Add additional social login providers (GitHub, Twitter, etc.)
 - Connect to a real database for user management
 - Add user profile management
 - Implement role-based access control
+- Add real-time notifications
+- Implement data visualization with charts
+- Add export functionality for data tables
 
 ## 📄 License
 
