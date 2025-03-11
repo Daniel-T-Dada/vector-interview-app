@@ -17,6 +17,8 @@ The application is live and accessible at: [https://vector-interview-app.vercel.
 
 - **Google OAuth Authentication**: Sign in with your existing Google account - no registration needed!
 - **Email/Password Authentication**: Traditional login with form validation
+- **Admin Dashboard**: Comprehensive admin interface with summary cards and recent activity
+- **Interview Management**: View, sort, and paginate through interview data
 - **Responsive Design**: Mobile-first approach for all screen sizes
 - **Dark/Light Mode**: Theme toggle with system preference detection
 - **Form Validation**: Client-side validation using Yup and React Hook Form
@@ -94,11 +96,15 @@ The application will be available at [http://localhost:3000](http://localhost:30
 │   │   │   ├── page.jsx
 │   │   ├── signup/       # Signup page with validation
 │   │   │   ├── page.jsx
-│   │   ├── dashboard/    # Protected dashboard page
-│   │   │   ├── page.jsx
-│   │   ├── api/          # API routes
-│   │   │   ├── auth/
-│   │   │   │   ├── [...nextauth]/route.js  # NextAuth.js API route
+│   ├── dashboard/        # Dashboard pages
+│   │   ├── page.jsx      # User dashboard page
+│   │   ├── admin/        # Admin section
+│   │   │   ├── page.jsx  # Admin dashboard page
+│   │   │   ├── interviews/ # Interview management
+│   │   │   │   ├── page.jsx # Interview list page
+│   ├── api/              # API routes
+│   │   ├── auth/
+│   │   │   ├── [...nextauth]/route.js  # NextAuth.js API route
 │── components/           # Reusable UI components
 │   ├── ui/               # ShadCN UI components
 │   │   ├── button.jsx    # Button component
@@ -107,11 +113,20 @@ The application will be available at [http://localhost:3000](http://localhost:30
 │   │   ├── label.jsx     # Label component
 │   │   ├── alert.jsx     # Alert component
 │   │   ├── spinner.jsx   # Loading spinner component
+│   ├── admin/            # Admin-specific components
+│   │   ├── sidebar.jsx   # Admin sidebar navigation
+│   │   ├── interview-table.jsx # Interview data table
 │   ├── Navbar.jsx        # Navigation bar
 │   ├── theme-provider.jsx # Theme provider for dark/light mode
 │   ├── auth-provider.jsx  # Authentication provider
 │── lib/                  # Utility functions
 │   ├── utils.js          # Helper functions
+│   ├── data/             # Mock data
+│   │   ├── interviews.js # Mock interview data
+│   ├── services/         # Service functions
+│   │   ├── interview-service.js # Interview data services
+│   ├── types/            # Type definitions
+│   │   ├── interview.js  # Interview type definitions
 │── middleware.js         # NextAuth.js middleware for route protection
 │── tailwind.config.js    # Tailwind CSS configuration
 ```
