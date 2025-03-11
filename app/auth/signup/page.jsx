@@ -90,13 +90,25 @@ function SignupForm() {
                 return;
             }
 
-            setSuccess("Account created successfully! You can now log in.");
-            setIsLoading(false);
-
-            // Redirect to login after a short delay
-            setTimeout(() => {
-                router.push("/auth/login");
-            }, 2000);
+            setSuccess("Account created successfully! Redirecting to dashboard...");
+            
+            // Sign in the user automatically after registration
+            const signInResult = await signIn("credentials", {
+                redirect: false,
+                email: data.email,
+                password: data.password,
+            });
+            
+            if (signInResult?.error) {
+                setError("Registration successful but failed to log in automatically. Please log in manually.");
+                // Redirect to login after a short delay
+                setTimeout(() => {
+                    router.push("/auth/login");
+                }, 2000);
+            } else {
+                // Redirect to admin dashboard
+                router.push("/dashboard");
+            }
         } catch (error) {
             setError("An error occurred. Please try again.");
             setIsLoading(false);

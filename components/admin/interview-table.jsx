@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { formatDate, formatStatus, getStatusColor } from "@/lib/services/interview-service";
-import { ChevronDown, ChevronUp, ArrowUpDown, Edit, Trash, MoreHorizontal } from "lucide-react";
+import { ChevronDown, ChevronUp, ArrowUpDown, Edit, Trash, MoreHorizontal, Calendar } from "lucide-react";
 
 export function InterviewTable({ interviews }) {
   const [sortField, setSortField] = useState("dateCreated");
@@ -90,7 +90,7 @@ export function InterviewTable({ interviews }) {
     <div className="w-full">
       {/* Action buttons */}
       {selectedInterviews.length > 0 && (
-        <div className="flex items-center gap-2 mb-4 p-2 bg-muted rounded-md">
+        <div className="sticky top-0 z-10 flex items-center gap-2 p-2 bg-muted/90 backdrop-blur-sm rounded-t-md">
           <span className="text-sm font-medium">
             {selectedInterviews.length} selected
           </span>
@@ -100,24 +100,24 @@ export function InterviewTable({ interviews }) {
             className="flex items-center gap-1 px-3 py-1 text-sm rounded-md bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-800"
           >
             <Edit className="h-4 w-4" />
-            <span>Edit</span>
+            <span className="hidden sm:inline">Edit</span>
           </button>
           <button
             onClick={handleDelete}
             className="flex items-center gap-1 px-3 py-1 text-sm rounded-md bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-800"
           >
             <Trash className="h-4 w-4" />
-            <span>Delete</span>
+            <span className="hidden sm:inline">Delete</span>
           </button>
         </div>
       )}
 
       {/* Table */}
-      <div className="overflow-x-auto rounded-md border border-border">
+      <div className="overflow-x-auto w-full">
         <table className="w-full text-sm">
           <thead className="bg-muted">
             <tr>
-              <th className="px-4 py-3 w-10">
+              <th className="px-2 sm:px-4 py-3 w-10">
                 <input
                   type="checkbox"
                   className="rounded border-gray-300 text-primary focus:ring-primary"
@@ -127,33 +127,35 @@ export function InterviewTable({ interviews }) {
                 />
               </th>
               <th
-                className="px-4 py-3 text-left font-medium cursor-pointer"
+                className="px-2 sm:px-4 py-3 text-left font-medium cursor-pointer"
                 onClick={() => handleSort("title")}
               >
                 <div className="flex items-center">
-                  Title
+                  <span className="whitespace-nowrap">Title</span>
                   {getSortIcon("title")}
                 </div>
               </th>
               <th
-                className="px-4 py-3 text-left font-medium cursor-pointer"
+                className="px-2 sm:px-4 py-3 text-left font-medium cursor-pointer whitespace-nowrap"
                 onClick={() => handleSort("status")}
               >
                 <div className="flex items-center">
-                  Status
+                  <span>Status</span>
                   {getSortIcon("status")}
                 </div>
               </th>
               <th
-                className="px-4 py-3 text-left font-medium cursor-pointer"
+                className="hidden sm:table-cell px-2 sm:px-4 py-3 text-left font-medium cursor-pointer whitespace-nowrap"
                 onClick={() => handleSort("dateCreated")}
               >
                 <div className="flex items-center">
-                  Date Created
+                  <span>Date Created</span>
                   {getSortIcon("dateCreated")}
                 </div>
               </th>
-              <th className="px-4 py-3 text-right font-medium">Actions</th>
+              <th className="px-2 sm:px-4 py-3 text-right font-medium w-10 sm:w-auto">
+                <span className="sr-only">Actions</span>
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
@@ -166,7 +168,7 @@ export function InterviewTable({ interviews }) {
                     key={interview.id}
                     className={`bg-card hover:bg-muted/50 transition-colors ${isSelected ? 'bg-muted/50' : ''}`}
                   >
-                    <td className="px-4 py-3">
+                    <td className="px-2 sm:px-4 py-3">
                       <input
                         type="checkbox"
                         className="rounded border-gray-300 text-primary focus:ring-primary"
@@ -174,18 +176,27 @@ export function InterviewTable({ interviews }) {
                         onChange={() => handleSelectInterview(interview.id)}
                       />
                     </td>
-                    <td className="px-4 py-3">{interview.title}</td>
-                    <td className="px-4 py-3">
+                    <td className="px-2 sm:px-4 py-3">
+                      <div className="max-w-[150px] sm:max-w-none truncate">
+                        {interview.title}
+                      </div>
+                      {/* Show date on mobile */}
+                      <div className="flex items-center text-xs text-muted-foreground mt-1 sm:hidden">
+                        <Calendar className="h-3 w-3 mr-1" />
+                        {formatDate(interview.dateCreated)}
+                      </div>
+                    </td>
+                    <td className="px-2 sm:px-4 py-3 whitespace-nowrap">
                       <span
-                        className={`px-3 py-1 text-xs rounded-full ${statusColors.bg} ${statusColors.text}`}
+                        className={`px-2 sm:px-3 py-1 text-xs rounded-full ${statusColors.bg} ${statusColors.text}`}
                       >
                         {formatStatus(interview.status)}
                       </span>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="hidden sm:table-cell px-2 sm:px-4 py-3 whitespace-nowrap">
                       {formatDate(interview.dateCreated)}
                     </td>
-                    <td className="px-4 py-3 text-right">
+                    <td className="px-2 sm:px-4 py-3 text-right">
                       <button
                         className="p-1 rounded-md hover:bg-muted"
                         onClick={() => handleSelectInterview(interview.id)}
@@ -209,8 +220,8 @@ export function InterviewTable({ interviews }) {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between mt-4">
-          <div className="text-sm text-muted-foreground">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-4 border-t border-border bg-card">
+          <div className="text-xs sm:text-sm text-muted-foreground">
             Showing {startIndex + 1}-
             {Math.min(startIndex + itemsPerPage, sortedInterviews.length)} of{" "}
             {sortedInterviews.length} interviews
@@ -219,7 +230,7 @@ export function InterviewTable({ interviews }) {
             <button
               onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
               disabled={currentPage === 1}
-              className="px-3 py-1 rounded-md border border-border bg-card hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-3 py-1 text-sm rounded-md border border-border bg-card hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Previous
             </button>
@@ -228,7 +239,7 @@ export function InterviewTable({ interviews }) {
                 setCurrentPage(Math.min(totalPages, currentPage + 1))
               }
               disabled={currentPage === totalPages}
-              className="px-3 py-1 rounded-md border border-border bg-card hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-3 py-1 text-sm rounded-md border border-border bg-card hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Next
             </button>
