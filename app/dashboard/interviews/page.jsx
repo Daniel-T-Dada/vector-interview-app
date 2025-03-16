@@ -6,6 +6,8 @@ import { InterviewTable } from "@/components/admin/interview-table";
 import { getAllInterviews } from "@/lib/services/interview-service";
 import { Plus, Search, Filter, ChevronDown } from "lucide-react";
 import { InterviewsSkeleton } from "@/components/skeletons/interviews-skeleton";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 function InterviewsContent() {
   const { data: session } = useSession();
@@ -37,8 +39,14 @@ function InterviewsContent() {
       try {
         setLoading(true);
         const data = await getAllInterviews();
-        setInterviews(data);
-        setFilteredInterviews(data);
+        
+      
+        const sortedData = [...data].sort((a, b) => {
+          return new Date(b.dateCreated) - new Date(a.dateCreated);
+        });
+        
+        setInterviews(sortedData);
+        setFilteredInterviews(sortedData);
         setError(null);
       } catch (err) {
         setError("Failed to load interviews");
@@ -122,12 +130,14 @@ function InterviewsContent() {
               </button>
               
               {/* Create Interview Button - Mobile */}
+              <Link href="/dashboard/interviews/create">
               <button
                 className="flex items-center justify-center p-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
                 aria-label="Create new interview"
               >
                 <Plus className="h-5 w-5" />
               </button>
+              </Link>
             </div>
           </div>
           
@@ -166,15 +176,17 @@ function InterviewsContent() {
             </div>
             
             {/* Create Interview Button - Desktop/Tablet */}
-            <div className="hidden md:block md:col-span-4 lg:col-span-3">
-              <button
-                className="flex items-center justify-center gap-2 px-4 py-2 w-full bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
-                aria-label="Create new interview"
-              >
-                <Plus className="h-5 w-5" />
-                <span>Create Interview</span>
-              </button>
-            </div>
+            <Link href="/dashboard/interviews/create">
+              <div className="hidden md:block md:col-span-4 lg:col-span-3">
+                <button
+                  className="flex items-center justify-center gap-2 px-4 py-2 w-full bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+                  aria-label="Create new interview"
+                >
+                  <Plus className="h-5 w-5" />
+                  <span>Create Interview</span>
+                </button>
+              </div>
+            </Link>
           </div>
         </div>
         

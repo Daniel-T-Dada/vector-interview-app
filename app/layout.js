@@ -3,6 +3,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/components/auth-provider";
 import { ConditionalNavbar } from "@/components/conditional-navbar";
+import { ToastProvider } from "@/components/ui/use-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -55,14 +56,16 @@ export default function RootLayout({ children }) {
           disableTransitionOnChange
         >
           <AuthProvider>
-            <div className="flex min-h-screen flex-col bg-background">
-              <ConditionalNavbar />
-              <main className="flex-1 flex justify-center relative z-10">
-                <div className="w-full">
-                  {children}
-                </div>
-              </main>
-            </div>
+            <ToastProvider>
+              <div className="flex min-h-screen flex-col bg-background">
+                <ConditionalNavbar />
+                <main className="flex-1 flex justify-center relative z-10">
+                  <div className="w-full">
+                    {children}
+                  </div>
+                </main>
+              </div>
+            </ToastProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>
