@@ -6,12 +6,12 @@ import { Navbar } from "@/components/Navbar";
 export function ConditionalNavbar() {
   const pathname = usePathname();
   
-  // Updated condition to check for the admin dashboard path structure
-  // We want to hide navbar only for /dashboard/* but show it for /user-dashboard/*
+  // To make sure the candidate does not see the admin navbar and visa versa
   const isAdminDashboard = pathname?.startsWith('/dashboard');
+  const isInterviewPage = pathname?.startsWith('/interview');
   
-  // Don't show navbar on admin dashboard pages
-  if (isAdminDashboard) {
+  // Don't show navbar on admin dashboard or interview pages
+  if (isAdminDashboard || isInterviewPage) {
     return null;
   }
 

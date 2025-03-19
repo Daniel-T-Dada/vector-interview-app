@@ -1,10 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { formatDate, formatStatus, getStatusColor } from "@/lib/services/interview-service";
-import { ChevronDown, ChevronUp, ArrowUpDown, Edit, Trash, MoreHorizontal, Calendar } from "lucide-react";
+import { ChevronDown, ChevronUp, ArrowUpDown, Edit, Trash, MoreHorizontal, Calendar, ChevronLeft, ChevronRight, UserRound, Eye, Link as LinkIcon } from "lucide-react";
+import Link from 'next/link';
+import { useToast } from "@/components/ui/use-toast";
 
 export function InterviewTable({ interviews }) {
+  const { toast } = useToast();
   const [sortField, setSortField] = useState("dateCreated");
   const [sortDirection, setSortDirection] = useState("desc");
   const [currentPage, setCurrentPage] = useState(1);
@@ -45,6 +48,29 @@ export function InterviewTable({ interviews }) {
 
   const handleDelete = () => {
     alert(`Delete interview(s): ${selectedInterviews.join(', ')}`);
+  };
+
+  // This funcction will make the admin copy the link to the candidate's interview page and send to them via email 
+  const copyLinkToClipboard = (interview) => {
+    const baseUrl = window.location.origin;
+    const interviewUrl = `${baseUrl}/interview/${interview.id}`;
+    
+    navigator.clipboard.writeText(interviewUrl)
+      .then(() => {
+        toast({
+          title: "Link copied!",
+          description: `Candidate link for "${interview.title}" copied to clipboard.`,
+          variant: "success",
+        });
+      })
+      .catch((error) => {
+        console.error('Failed to copy link: ', error);
+        toast({
+          title: "Failed to copy link",
+          description: "Please try again or copy the URL manually.",
+          variant: "destructive",
+        });
+      });
   };
 
   // Sort interviews
@@ -197,12 +223,30 @@ export function InterviewTable({ interviews }) {
                       {formatDate(interview.dateCreated)}
                     </td>
                     <td className="px-2 sm:px-4 py-3 text-right">
-                      <button
-                        className="p-1 rounded-md hover:bg-muted"
-                        onClick={() => handleSelectInterview(interview.id)}
-                      >
-                        <MoreHorizontal className="h-4 w-4" />
-                      </button>
+                      <div className="flex items-center justify-end space-x-2">
+                        <button
+                          className="flex items-center gap-1 px-2 py-1 text-sm rounded-md bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-800"
+                          title="Copy candidate access link"
+                          onClick={() => copyLinkToClipboard(interview)}
+                        >
+                          <LinkIcon className="h-4 w-4" />
+                          <span className="hidden sm:inline">Copy Link</span>
+                        </button>
+                        <Link href={`/interview/${interview.id}`} passHref>
+                          <button
+                            className="p-1 rounded-md hover:bg-muted text-primary"
+                            title="Preview as candidate"
+                          >
+                            <Eye className="h-4 w-4" />
+                          </button>
+                        </Link>
+                        <button
+                          className="p-1 rounded-md hover:bg-muted"
+                          onClick={() => handleSelectInterview(interview.id)}
+                        >
+                          <MoreHorizontal className="h-4 w-4" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 );

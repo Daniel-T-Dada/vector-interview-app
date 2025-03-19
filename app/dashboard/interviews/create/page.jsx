@@ -18,7 +18,7 @@ export default function CreateInterviewPage() {
     const [formData, setFormData] = useState({
         title: '',
         description: '',
-        questions: [{ text: '', type: 'text' }]
+        questions: [{ text: '', type: 'text', timeLimit: 120 }]
     });
     const [errors, setErrors] = useState({});
     const handleInputChange = (e) => {
@@ -36,16 +36,16 @@ export default function CreateInterviewPage() {
     };
 
     // to change the interview question if we dont like it or the boss says so...lol
-    const handleQuestionChange = (index, value) => {
+    const handleQuestionChange = (index, field, value) => {
         const updatedQuestions = [...formData.questions];
-        updatedQuestions[index].text = value;
+        updatedQuestions[index][field] = value;
         setFormData({
             ...formData,
             questions: updatedQuestions
         });
-        if (errors[`question-${index}`]) {
+        if (errors[`question-${index}-${field}`]) {
             setErrors({...errors,
-                [`question-${index}`]: null
+                [`question-${index}-${field}`]: null
             });
         }
     };
@@ -54,7 +54,7 @@ export default function CreateInterviewPage() {
     const addQuestion = () => {
         setFormData({
             ...formData,
-            questions: [...formData.questions, { text: '', type: 'text' }]
+            questions: [...formData.questions, { text: '', type: 'text', timeLimit: 120 }]
         });
     };
 
@@ -81,7 +81,10 @@ export default function CreateInterviewPage() {
         }
         formData.questions.forEach((question, index) => {
             if (!question.text.trim()) {
-                newErrors[`question-${index}`] = "Question text is required";
+                newErrors[`question-${index}-text`] = "Question text is required";
+            }
+            if (!question.timeLimit || question.timeLimit < 30) {
+                newErrors[`question-${index}-timeLimit`] = "Time limit must be at least 30 seconds";
             }
         });
         
@@ -220,12 +223,27 @@ export default function CreateInterviewPage() {
                                     <Textarea
                                         id={`question-${index}`}
                                         value={question.text}
-                                        onChange={(e) => handleQuestionChange(index, e.target.value)}
-                                        className={errors[`question-${index}`] ? "border-red-500" : ""}
+                                        onChange={(e) => handleQuestionChange(index, 'text', e.target.value)}
+                                        className={errors[`question-${index}-text`] ? "border-red-500" : ""}
                                         rows={2}
                                     />
-                                    {errors[`question-${index}`] && (
-                                        <p className="text-red-500 text-sm mt-1">{errors[`question-${index}`]}</p>
+                                    {errors[`question-${index}-text`] && (
+                                        <p className="text-red-500 text-sm mt-1">{errors[`question-${index}-text`]}</p>
+                                    )}
+                                    
+                                    <div className="flex items-center space-x-2 mt-2">
+                                        <Label htmlFor={`timelimit-${index}`} className="w-1/3">Time Limit (seconds):</Label>
+                                        <Input
+                                            id={`timelimit-${index}`}
+                                            type="number"
+                                            min="30"
+                                            value={question.timeLimit}
+                                            onChange={(e) => handleQuestionChange(index, 'timeLimit', parseInt(e.target.value) || 30)}
+                                            className={`w-1/3 ${errors[`question-${index}-timeLimit`] ? "border-red-500" : ""}`}
+                                        />
+                                    </div>
+                                    {errors[`question-${index}-timeLimit`] && (
+                                        <p className="text-red-500 text-sm mt-1">{errors[`question-${index}-timeLimit`]}</p>
                                     )}
                                 </div>
                             ))}
